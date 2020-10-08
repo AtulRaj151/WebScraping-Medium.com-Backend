@@ -22,14 +22,20 @@ fetchBlogPosts = async (tag) => {
           if (creater === null) {
             break;
           }
+          creater = $.parseHTML(creater)[0].data;
+
           let title = $(`div:nth-child(${i})`, blogs)
             .find(".graf--title")
             .html();
+          title = $.parseHTML(title)[0].data;
+
           let readingTime = $(`div:nth-child(${i})`, blogs)
             .find(".readingTime")
             .attr("title");
+          readingTime = $.parseHTML(readingTime)[0].data;
 
           let date = $(`div:nth-child(${i})`, blogs).find("time").html();
+          date = $.parseHTML(date)[0].data;
           arr.push({
             creater: creater,
             readingTime: readingTime,
@@ -46,13 +52,13 @@ fetchBlogPosts = async (tag) => {
     });
   }).then((result) => {
     if (result) {
-      console.log(result);
+      // console.log(result);
       return result;
     }
   });
 };
-module.exports.Home = async (req, res) => {
-  let arr = await fetchBlogPosts("tech");
+module.exports.scrap = async (req, res) => {
+  let arr = await fetchBlogPosts(req.params.tags);
 
   return res.json({
     arr,
